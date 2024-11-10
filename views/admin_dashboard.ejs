@@ -1,0 +1,146 @@
+<h2><i class="fas fa-user-shield"></i> Admin Dashboard</h2>
+<p>Welcome, Admin <%= user.username %>!</p>
+
+<!-- Toggle Button for Add New Document -->
+<h3 class="mt-4">
+    <i class="fas fa-folder-plus"></i> 
+    <span onclick="toggleAddDocument()" class="add-icon" style="cursor: pointer;">
+        <i class="fas fa-plus-circle"></i> Add New Document
+    </span>
+</h3>
+
+<!-- Add New Document Form (Initially Hidden) -->
+<div id="addDocumentForm" class="border p-3 rounded shadow-sm" style="display: none;">
+    <form action="/documents/add" method="POST">
+        <div class="form-group">
+            <label for="ctrlNo"><i class="fas fa-hashtag"></i> Control Number</label>
+            <input type="text" class="form-control" id="ctrlNo" name="ctrlNo" required>
+        </div>
+        <div class="form-group">
+            <label for="sender"><i class="fas fa-user"></i> Sender</label>
+            <input type="text" class="form-control" id="sender" name="sender" required>
+        </div>
+        <div class="form-group">
+            <label for="subject"><i class="fas fa-file-alt"></i> Subject</label>
+            <input type="text" class="form-control" id="subject" name="subject" required>
+        </div>
+        <div class="form-group">
+            <label for="status"><i class="fas fa-info-circle"></i> Status</label>
+            <select class="form-control" id="status" name="status">
+                <option value="Pending">Pending</option>
+                <option value="Approved">Approved</option>
+                <option value="Rejected">Rejected</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="remarks"><i class="fas fa-comment-dots"></i> Remarks</label>
+            <input type="text" class="form-control" id="remarks" name="remarks">
+        </div>
+        <div class="form-group">
+            <label for="dueDate"><i class="fas fa-calendar-alt"></i> Due Date</label>
+            <input type="date" class="form-control" id="dueDate" name="dueDate">
+        </div>
+        <div class="form-group">
+            <label for="user"><i class="fas fa-user-tag"></i> Assign to User</label>
+            <input type="text" class="form-control" id="user" name="user" required>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3"><i class="fas fa-plus-circle"></i> Submit Document</button>
+    </form>
+</div>
+
+<h3 class="mt-5"><i class="fas fa-folder-open"></i> Document List</h3>
+<table class="table table-bordered mt-3 shadow-sm">
+    <thead class="thead-light">
+        <tr>
+            <th><i class="fas fa-hashtag"></i> CTRL NO.</th>
+            <th><i class="fas fa-user"></i> Sender</th>
+            <th><i class="fas fa-file-alt"></i> Subject</th>
+            <th><i class="fas fa-info-circle"></i> Status</th>
+            <th><i class="fas fa-comment-dots"></i> Remarks</th>
+            <th><i class="fas fa-calendar-alt"></i> Due Date</th>
+            <th><i class="fas fa-cogs"></i> Actions</th>
+            <th><i class="fas fa-percent"></i> Approval Progress</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% documents.forEach(doc => { %>
+            <tr>
+                <td><%= doc.ctrlNo %></td>
+                <td><%= doc.sender %></td>
+                <td><%= doc.subject %></td>
+                <td><%= doc.status %></td>
+
+                <!-- Editable Remarks Field -->
+                <td>
+                    <form action="/documents/updateRemarks" method="POST" class="form-inline">
+                        <input type="hidden" name="ctrlNo" value="<%= doc.ctrlNo %>">
+                        <input type="text" name="remarks" class="form-control form-control-sm" value="<%= doc.remarks %>">
+                        <button type="submit" class="btn btn-sm btn-primary"><i class="fas fa-save"></i> Update</button>
+                    </form>
+                </td>
+
+                <td><%= doc.dueDate %></td>
+                <td>
+                    <!-- Checkboxes for Each Section with Real-time Progress Update -->
+                    <form action="/documents/updateStatus" method="POST" class="d-inline">
+                        <input type="hidden" name="ctrlNo" value="<%= doc.ctrlNo %>">
+                        <div class="d-flex flex-column" id="checkbox-container-<%= doc.ctrlNo %>">
+                            <% if (doc.approvalStatus) { %>
+                                <% Object.keys(doc.approvalStatus).forEach((section) => { %>
+                                    <label class="form-check-label">
+                                        <input type="checkbox" class="form-check-input approval-checkbox" data-doc="<%= doc.ctrlNo %>" data-section="<%= section %>" 
+                                               <%= doc.approvalStatus[section] ? 'checked' : '' %>> 
+                                        <%= section.charAt(0).toUpperCase() + section.slice(1) %>
+                                    </label>
+                                <% }) %>
+                            <% } else { %>
+                                <p class="text-danger">No approval status available for this document.</p>
+                            <% } %>
+                        </div>
+                        <button type="submit" class="btn btn-sm btn-success mt-2 update-button" id="update-<%= doc.ctrlNo %>">
+                            <i class="fas fa-check-circle"></i> Approve
+                        </button>
+                    </form>
+                </td>
+                <td>
+                    <div id="progress-<%= doc.ctrlNo %>">0%</div>
+                </td>
+            </tr>
+        <% }) %>
+    </tbody>
+</table>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    // Toggle Add Document Form
+    function toggleAddDocument() {
+        const form = document.getElementById("addDocumentForm");
+        form.style.display = (form.style.display === "none" || form.style.display === "") ? "block" : "none";
+    }
+
+    // Handle Checkbox Clicks and Progress Update
+    document.querySelectorAll('.approval-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const docId = this.getAttribute('data-doc');
+            const section = this.getAttribute('data-section');
+            const isChecked = this.checked;
+
+            // Send the updated checkbox state to the server
+            fetch('/documents/updateApprovalStatus', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ctrlNo: docId, section, isChecked })
+            });
+
+            // Update Progress Indicator
+            const checkboxes = document.querySelectorAll(`.approval-checkbox[data-doc="${docId}"]`);
+            const checkedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
+            const total = checkboxes.length;
+            const percentage = Math.round((checkedCount / total) * 100);
+            document.getElementById(`progress-${docId}`).textContent = `${percentage}%`;
+
+            // Style checked checkboxes in green
+            this.parentNode.style.color = isChecked ? 'green' : '';
+        });
+    });
+</script>

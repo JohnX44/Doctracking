@@ -1,0 +1,64 @@
+<div class="user-dashboard container my-5">
+    <h2 class="text-center"><i class="fas fa-file-alt"></i> Your Document Status</h2>
+    <p class="text-center text-muted">Welcome, <strong><%= user.username %></strong>! Here is the current status of your documents:</p>
+
+    <div class="table-responsive mt-4">
+        <table class="table table-hover table-bordered">
+            <thead class="table-light">
+                <tr>
+                    <th><i class="fas fa-hashtag"></i> Control No.</th>
+                    <th><i class="fas fa-info-circle"></i> Status</th>
+                    <th><i class="fas fa-comment-dots"></i> Remarks</th>
+                </tr>
+            </thead>
+            <tbody id="document-rows">
+                <% documents.forEach(doc => { %>
+                    <tr>
+                        <td><i class="fas fa-tag"></i> <%= doc.ctrlNo %></td>
+                        <td>
+                            <% if (doc.status === "Approved") { %>
+                                <span class="badge bg-success"><i class="fas fa-check-circle"></i> <%= doc.status %></span>
+                            <% } else if (doc.status === "Pending") { %>
+                                <span class="badge bg-warning text-dark"><i class="fas fa-hourglass-half"></i> <%= doc.status %></span>
+                            <% } else { %>
+                                <span class="badge bg-danger"><i class="fas fa-times-circle"></i> <%= doc.status %></span>
+                            <% } %>
+                        </td>
+                        <td><i class="fas fa-comments"></i> <%= doc.remarks %></td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Socket.IO and Real-Time Update Script -->
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
+
+    // Listen for document updates from the server
+    socket.on('documentUpdate', (updatedDocuments) => {
+        // Filter for documents relevant to the current user
+        const userDocuments = updatedDocuments.filter(doc => doc.user === "<%= user.username %>");
+        
+        const tableBody = document.getElementById("document-rows");
+        tableBody.innerHTML = ''; // Clear the existing table rows
+
+        // Populate the table with the updated document data
+        userDocuments.forEach(doc => {
+            const statusBadge = doc.status === "Approved"
+                ? `<span class="badge bg-success"><i class="fas fa-check-circle"></i> ${doc.status}</span>`
+                : doc.status === "Pending"
+                    ? `<span class="badge bg-warning text-dark"><i class="fas fa-hourglass-half"></i> ${doc.status}</span>`
+                    : `<span class="badge bg-danger"><i class="fas fa-times-circle"></i> ${doc.status}</span>`;
+            
+            const row = `<tr>
+                <td><i class="fas fa-tag"></i> ${doc.ctrlNo}</td>
+                <td>${statusBadge}</td>
+                <td><i class="fas fa-comments"></i> ${doc.remarks}</td>
+            </tr>`;
+            tableBody.insertAdjacentHTML('beforeend', row);
+        });
+    });
+</script>

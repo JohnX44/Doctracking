@@ -1,0 +1,332 @@
+/* Minimalist Light Theme for styles.css */
+
+body {
+    background-color: #f8f9fa; /* Soft off-white background */
+    color: #333333; /* Dark gray text color for readability */
+    font-family: Arial, sans-serif;
+}
+
+
+
+/* Navbar Styling */
+.navbar {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.navbar-title {
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.nav-icon-link {
+    color: #6c757d;
+    font-size: 1.25rem;
+    transition: color 0.3s;
+}
+
+.nav-icon-link:hover {
+    color: #333;
+}
+
+.dropdown-menu {
+    font-size: 0.9rem;
+}
+
+.navbar .navbar-icons {
+    gap: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .navbar-title {
+        font-size: 1rem;
+    }
+}
+/* Nav */
+
+/* Base Styling */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+.login-page {
+    display: flex;
+    background-color: #f7f8fc;
+    color: #333;
+}
+
+/* Login Form Section */
+.login-form-section {
+    width: 50%;
+    padding: 2rem;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #333;
+}
+
+.login-subtitle {
+    font-size: 1rem;
+    color: #666;
+}
+
+.form-group label {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.form-control {
+    padding: 0.75rem;
+    margin-top: 0.5rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #ced4da;
+}
+
+.btn-primary {
+    background-color: #6c5ce7;
+    border: none;
+    padding: 0.75rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #5b4ec7;
+}
+
+.text-muted {
+    color: #888;
+    font-size: 0.9rem;
+}
+
+/* Video Section */
+.login-video-section {
+    width: 50%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.background-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.75;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .login-page {
+        flex-direction: column;
+    }
+
+    .login-form-section,
+    .login-video-section {
+        width: 100%;
+        padding: 1.5rem;
+    }
+
+    .background-video {
+        display: none; /* Hide video on smaller screens for simplicity */
+    }
+}
+
+/* Login Form Section */
+
+h2, h3 {
+    font-weight: bold;
+    color: #333333;
+    margin-bottom: 1.5rem;
+}
+
+.card, .table, .form-group, .btn {
+    border-radius: 12px; /* Softer rounded corners */
+    background-color: #ffffff; /* Clean white for cards */
+    color: #333333;
+    margin-bottom: 1.5rem; /* Add spacing between cards */
+}
+
+.card, .form-inline, .table {
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05); /* Subtle shadow for card effect */
+    padding: 1.5rem; /* Add padding inside cards */
+}
+
+h2 {
+    font-size: 1.8rem;
+}
+
+h3 {
+    font-size: 1.4rem;
+}
+
+.table th, .table td {
+    padding: 0.75rem 1rem; /* Add padding inside table cells */
+    vertical-align: middle;
+    font-size: 0.9rem;
+}
+
+.table thead th {
+    background-color: #f1f3f5; /* Light gray for table header */
+    color: #666666; /* Medium gray text for headers */
+    font-weight: 600;
+    border: none;
+}
+
+.table-bordered > :not(caption) > * > * {
+    border-color: #e9ecef !important; /* Light border color */
+}
+
+.form-control, .btn {
+    font-size: 0.9rem;
+    background-color: #f7f8fa; /* Light gray input fields */
+    color: #333333;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem; /* Padding inside input fields */
+    margin-bottom: 1rem; /* Space between form fields */
+}
+
+.form-control::placeholder {
+    color: #adb5bd; /* Light gray placeholder text */
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.btn-primary:hover, .btn-success:hover, .btn-secondary:hover {
+    opacity: 0.95; /* Slight hover effect for buttons */
+}
+
+.update-button {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.approval-checkbox {
+    margin-right: 8px;
+}
+
+/* Link styling */
+a {
+    color: #333333;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #007bff;
+    text-decoration: underline;
+}
+
+/* Custom scrollbar for minimal look */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f3f5;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #ced4da;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #adb5bd;
+}
+
+/* Footer Styling */
+.footer {
+    background-color: #f8f9fa;
+    color: #6c757d;
+    border-top: 1px solid #e9ecef;
+}
+
+.footer .footer-logo .footer-brand-name {
+    font-weight: 600;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+.footer-links a {
+    color: #6c757d;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer-links a:hover {
+    color: #333;
+}
+
+.footer-social a {
+    color: #6c757d;
+    font-size: 1.2rem;
+    transition: color 0.3s;
+}
+
+.footer-social a:hover {
+    color: #333;
+}
+
+.footer small {
+    color: #adb5bd;
+}
+/* Footer Styling */
+
+
+/* User Dashboard Styling */
+.user-dashboard h2 {
+    font-weight: 700;
+    color: #333;
+}
+
+.user-dashboard .table {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.user-dashboard .badge {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.6rem;
+    display: inline-flex;
+    align-items: center;
+}
+
+.user-dashboard .badge i {
+    margin-right: 0.2rem;
+}
+
+.user-dashboard .table th, 
+.user-dashboard .table td {
+    vertical-align: middle;
+    font-size: 0.95rem;
+}
